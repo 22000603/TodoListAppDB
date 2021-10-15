@@ -3,6 +3,7 @@ package com.todo.service;
 import java.io.BufferedReader;
 
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,6 +28,7 @@ public class TodoUtil {
 	public static void createItem(TodoList list) {
 
 		String title, desc, category, due_date;
+		int importance;
 		Scanner sc = new Scanner(System.in);
 
 		System.out.print("[항목 추가]\n");
@@ -45,8 +47,11 @@ public class TodoUtil {
 
 		System.out.print("마감날짜 ex)2021/09/26 : ");
 		due_date = sc.nextLine().trim();
+		
+		System.out.print("중요도 (1/2/3) : ");
+		importance = sc.nextInt();
 
-		TodoItem t = new TodoItem(category, title, desc, due_date);
+		TodoItem t = new TodoItem(category, title, desc, due_date, importance);
 		if (list.addItem(t) > 0)
 			System.out.println("새로운 리스트가 추가되었습니다. ");
 	}
@@ -93,6 +98,7 @@ public class TodoUtil {
 	public static void updateItem(TodoList l) {
 
 		String new_title, new_desc, new_category, new_due_date;
+		int importance;
 		Scanner sc = new Scanner(System.in);
 
 		System.out.print("[항목 수정]\n" + "수정할 항목의 번호를 입력하세요 : ");
@@ -108,7 +114,7 @@ public class TodoUtil {
 				if (number == item.getId()) {
 					System.out.println(item.toString());
 
-					System.out.print("수정할 항목의 영역들을 입력하세요 (카테고리/제목/내용/마감) : ");
+					System.out.print("수정할 항목의 영역들을 입력하세요 (카테고리/제목/내용/마감/중요도) : ");
 					String update = sc.nextLine().trim();
 
 					if (update.contains("카테고리")) {
@@ -137,6 +143,11 @@ public class TodoUtil {
 						System.out.print("새 마감날짜 : ");
 						new_due_date = sc.nextLine().trim();
 						item.setDue_date(new_due_date);
+					}
+					if (update.contains("중요도")) {
+						System.out.print("새 중요도 : ");
+						importance = sc.nextInt();
+						item.setImportance(importance);
 					}
 					
 					SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
@@ -213,10 +224,42 @@ public class TodoUtil {
 
 	}
 
-	public static void completeItem(TodoList l, int number) {
-		if(l.compleItem(number)>0)
-			System.out.printf("%d번을 완료 체크하였습니다. ", number);
-		else
-			System.out.printf("%d번 완료 체크에 문제가 있습니다. ", number);
+	public static void completeItem(TodoList l, String number) {
+		String [] numbers = number.split(",");
+		for(String n : numbers) {
+			l.compleItem(Integer.parseInt(n));
+		}
+		System.out.printf("%s번 완료 체크하였습니다. ", number);
+	
+	}
+
+	
+	public static void uncompleteItem(TodoList l, String number) {
+		String [] numbers = number.split(",");
+		for(String n : numbers) {
+			l.uncompleItem(Integer.parseInt(n));
+		}
+		System.out.printf("%s번 완료 체크하였습니다. ", number);
+		
+	}
+
+	public static void cleanList(TodoList l) {
+		ArrayList<Integer> closed = new ArrayList<Integer>();
+		for(TodoItem item : l.getList()) {
+			if(item.getRest_days()>0) {
+				System.out.println(item.toString());
+				closed.add(item.getId());
+			}
+		}
+		Scanner sc = new Scanner(System.in);
+		System.out.print("위 항목들을 모두 삭제하시겠습니까? (y/n) : ");
+		String d = sc.next();
+		if (d.equals("y")) {
+			for( int id : closed) l.deleteItem(id);
+				System.out.println("TodoList가 청소되었습니다.");
+		} else {
+			System.out.println("청소가 취소되었습니다.");
+		}
+		
 	}
 }

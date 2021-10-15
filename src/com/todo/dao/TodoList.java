@@ -66,8 +66,8 @@ public class TodoList {
 	 * @return A positive value when db is changed correctly.
 	 */
 	public int addItem(TodoItem t) {
-		String sql = "insert into list (title, memo, category, current_date, due_date)"
-				+ " values (?, ?, ?, ?, ?);";
+		String sql = "insert into list (title, memo, category, current_date, due_date, rest_days, importance)"
+				+ " values (?, ?, ?, ?, ?, ?, ?);";
 		PreparedStatement pstmt;
 		int count = 0;
 		try {
@@ -77,6 +77,8 @@ public class TodoList {
 			pstmt.setString(3, t.getCategory());
 			pstmt.setString(4, t.getCurrent_date());
 			pstmt.setString(5, t.getDue_date());
+			pstmt.setInt(6, t.getRest_days());
+			pstmt.setInt(7,  t.getImportance());
 			count = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -111,7 +113,7 @@ public class TodoList {
 	 * @return A positive value when db is changed correctly.
 	 */
 	public int editItem(TodoItem t) {
-		String sql = "update list set title=?, memo=?, category=?, current_date=?, due_date=?" + " where id = ?;";
+		String sql = "update list set title=?, memo=?, category=?, current_date=?, due_date=?, rest_days=?, importance=?" + " where id = ?;";
 		PreparedStatement pstmt;
 		int count = 0;
 		try {
@@ -121,7 +123,9 @@ public class TodoList {
 			pstmt.setString(3, t.getCategory());
 			pstmt.setString(4, t.getCurrent_date());
 			pstmt.setString(5, t.getDue_date());
-			pstmt.setInt(6, t.getId());
+			pstmt.setInt(6, t.getRest_days());
+			pstmt.setInt(7, t.getImportance());
+			pstmt.setInt(8, t.getId());
 			count = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -149,7 +153,8 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed);
+				int importance = rs.getInt("importance");
+				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed, importance);
 				list.add(t);
 			}
 			stmt.close();
@@ -194,7 +199,8 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed);
+				int importance = rs.getInt("importance");
+				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed, importance);
 				list.add(t);
 			}
 			stmt.close();
@@ -295,7 +301,8 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed);
+				int importance = rs.getInt("importance");
+				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed, importance);
 				list.add(t);
 			}
 			stmt.close();
@@ -320,7 +327,8 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed);
+				int importance = rs.getInt("importance");
+				TodoItem t = new TodoItem(id, category, title, description, due_date, current_date, is_completed, importance);
 				list.add(t);
 			}
 			stmt.close();
@@ -331,11 +339,27 @@ public class TodoList {
 	}
 
 	public int compleItem(int number) {
+		
 		Statement stmt;
 		int count = 0;
 		try {
 			stmt = conn.createStatement();
 			String sql = "update list set is_completed = 1 where id = " + number + ";";
+			count = stmt.executeUpdate(sql);
+			stmt.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	public int uncompleItem(int number) {
+		Statement stmt;
+		int count = 0;
+		try {
+			stmt = conn.createStatement();
+			String sql = "update list set is_completed = 0 where id = " + number + ";";
 			count = stmt.executeUpdate(sql);
 			stmt.close();
 			

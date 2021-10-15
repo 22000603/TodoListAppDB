@@ -17,6 +17,7 @@ public class TodoMain {
 		//boolean isList = false;
 		boolean quit = false;
 		String keyword;
+		String number;
 		//l.importData("todolist.txt");
 		Menu.displaymenu();
 		do {
@@ -88,8 +89,13 @@ public class TodoMain {
 				break;
 				
 			case "comp":
-				int number = sc.nextInt();
+				number = sc.nextLine().trim();
 				TodoUtil.completeItem(l, number);
+				break; 
+				
+			case "not_comp":
+				number = sc.nextLine().trim();
+				TodoUtil.uncompleteItem(l, number);
 				break; 
 				
 			case "ls_comp":
@@ -101,6 +107,20 @@ public class TodoMain {
 				System.out.println("완료되지 않은 항목 : ");
 				TodoUtil.listAll(l, 0);
 				break;
+				
+			case "ls_imp_least":
+				System.out.println("정렬 방법: 중요도 낮은 순 ");
+				TodoUtil.listAll(l, "importance", 1);
+				break;
+				
+			case "ls_imp_most":
+				System.out.println("정렬 방법: 중요도 높은 순  ");
+				TodoUtil.listAll(l, "importance", 0);
+				break;
+				
+			case "clean":
+				TodoUtil.cleanList(l);
+				break;  
 
 			default:
 				System.out.println("존재하지 않는 기능입니다.\n목록을 보시려면 help를 입력해 주세요.");
