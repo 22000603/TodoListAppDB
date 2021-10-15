@@ -8,8 +8,8 @@ public class Menu {
         System.out.println("[항목 추가] add");
         System.out.println("[항목 삭제] del");
         System.out.println("[항목 수정] edit");
-        System.out.println("[항목 완료] comp");
-        System.out.println("[항목 완료 취소] not_comp");	//추가 기능 1 : 완료 체크 취소하기 
+        System.out.println("[항목 완료] comp <numbers> ");
+        System.out.println("[항목 완료 취소] not_comp <numbers> ");	//추가 기능 1 : 완료 체크 취소하기 
         System.out.println("[전체 목록] ls");
         System.out.println("[제목내용 검색 기능] find <keyword>");
         System.out.println("[카테고리 검색 기능] find_cate <keyword>");

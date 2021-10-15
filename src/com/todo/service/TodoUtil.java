@@ -72,6 +72,7 @@ public class TodoUtil {
 		// Stream API를 사용하여 string 배열을 int배열로 변환
 		int[] n = Arrays.stream(numbers).mapToInt(Integer::parseInt).toArray();
 		String d;
+		
 		for (int deletion : n) {
 			for (TodoItem item : l.getList()) {
 				if (deletion == item.getId()) {
@@ -239,7 +240,7 @@ public class TodoUtil {
 		for(String n : numbers) {
 			l.uncompleItem(Integer.parseInt(n));
 		}
-		System.out.printf("%s번 완료 체크하였습니다. ", number);
+		System.out.printf("%s번 완료 체크를 취소하였습니다. ", number);
 		
 	}
 

@@ -91,9 +91,9 @@ public class TodoItem {
 		String list = "";
 		String memo = "["+category+"] "+title+" : "+desc.trim();
 		if(is_completed==1)
-			list = String.format("%2d.[v][%d]%-30s [D%+02d] 마감:%s 작성:%s", id, importance, memo,rest_days, due_date, current_date);
+			list = String.format("%2d.[v][%d]%-30s [D%+02d] 마감:%s (작성:%s)", id, importance, memo,rest_days, due_date, current_date);
 		else
-			list = String.format("%2d.[ ][%d]%-30s [D%+02d] 마감:%s 작성:%s", id, importance, memo,rest_days, due_date, current_date);
+			list = String.format("%2d.[ ][%d]%-30s [D%+02d] 마감:%s (작성:%s)", id, importance, memo,rest_days, due_date, current_date);
 		return list;
 	}
 	public String toSaveString() {
